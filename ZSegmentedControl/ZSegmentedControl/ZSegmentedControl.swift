@@ -25,7 +25,7 @@ public enum WidthStyle {
 }
 
 public protocol ZSegmentedControlSelectedProtocol: class {
-    func segmentedControlSelectedIndex(_ index: Int, animated: Bool, segmentedControl: ZSegmentedControl)
+    func segmentedControlSelectedIndex(_ index: Int, animated: Bool, byclick: Bool, segmentedControl: ZSegmentedControl)
 }
 
 public class ZSegmentedControl: UIView {
@@ -169,6 +169,7 @@ public class ZSegmentedControl: UIView {
     fileprivate var sliderConfig: (SliderPositionStyle, WidthStyle) = (.bottomWithHight(2),.adaptiveSpace(0))
     fileprivate var contentScrollViewWillDragging: Bool = false
     fileprivate var isTapItem: Bool = false
+    fileprivate var isByClick: Bool = false
     enum ResourceType {
         case text
         case image
@@ -314,6 +315,7 @@ extension ZSegmentedControl {
     }
     @objc private func selectedButton(sender: UIButton) {
         contentScrollViewWillDragging = false
+        isByClick = true
         isTapItem = true
         selectedIndex = sender.tag
     }
@@ -323,8 +325,9 @@ extension ZSegmentedControl {
     fileprivate func updateScrollViewOffset() {
         if itemsArray.count == 0 { return }
         let index = min(max(selectedIndex, 0), itemsArray.count-1)
-        delegate?.segmentedControlSelectedIndex(index, animated: isTapItem, segmentedControl: self)
-        
+        delegate?.segmentedControlSelectedIndex(index, animated: isTapItem, byclick: isByClick, segmentedControl: self)
+        isTapItem = true
+        isByClick = false
         let currentButton = self.itemsArray[index]
         let offset = getScrollViewCorrectOffset(by: currentButton)
         let duration = isTapItem || contentScrollViewWillDragging
