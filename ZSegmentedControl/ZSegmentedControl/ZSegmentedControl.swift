@@ -331,7 +331,7 @@ extension ZSegmentedControl {
         let currentButton = self.itemsArray[index]
         let offset = getScrollViewCorrectOffset(by: currentButton)
         let duration = isTapItem || contentScrollViewWillDragging
-            ? 0.3 : 0
+            ? 0.2 : 0
         isTapItem = false
         UIView.animate(withDuration: duration, animations: {
             self.itemsArray.forEach({ (button) in
